@@ -108,6 +108,11 @@ public class ApkPengelolaanKontak extends javax.swing.JFrame {
         jButton4.setBackground(new java.awt.Color(245, 203, 203));
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jButton4.setText("Export");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setBackground(new java.awt.Color(245, 203, 203));
         jButton5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -151,7 +156,7 @@ public class ApkPengelolaanKontak extends javax.swing.JFrame {
                                 .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                                 .addComponent(jButton4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(36, 36, 36)
                                 .addComponent(jButton5)
                                 .addGap(32, 32, 32))))
                     .addGroup(jPanel5Layout.createSequentialGroup()
@@ -194,6 +199,10 @@ public class ApkPengelolaanKontak extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
