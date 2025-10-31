@@ -382,6 +382,11 @@ private boolean validateCSVHeader(String header) {
         btnImport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(128, 161, 186));
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 20));
@@ -502,9 +507,8 @@ private boolean validateCSVHeader(String header) {
                                 .addGap(18, 18, 18)
                                 .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtNama, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                                    .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(cmbKategori, 0, 160, Short.MAX_VALUE)
-                                        .addComponent(txtNomorTelepon))))
+                                    .addComponent(cmbKategori, 0, 160, Short.MAX_VALUE)
+                                    .addComponent(txtNomorTelepon)))
                             .addGroup(panel2Layout.createSequentialGroup()
                                 .addGap(54, 54, 54)
                                 .addComponent(btnTambah)
@@ -594,6 +598,22 @@ private boolean validateCSVHeader(String header) {
     private void btnImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportActionPerformed
         importFromCSV();
     }//GEN-LAST:event_btnImportActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        int konfirmasi = JOptionPane.showConfirmDialog(
+        this,
+        "Apakah Anda yakin ingin keluar dari aplikasi?",
+        "Konfirmasi Keluar",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE
+    );
+
+    if (konfirmasi == JOptionPane.YES_OPTION) {
+        System.exit(0);
+    } else {
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+    }
+    }//GEN-LAST:event_formWindowClosing
 
     public static void main(String args[]) {
 
