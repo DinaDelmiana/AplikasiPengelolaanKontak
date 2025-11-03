@@ -19,29 +19,33 @@ public class PengelolaanKontakFrame extends javax.swing.JFrame {
         initComponents();
 
         controller = new KontakController();
-        model = new DefaultTableModel(new String[]{"No", "Nama", "Nomor Telepon", "Kategori"}, 0);
+        model = new DefaultTableModel(new String[]{"No", "Nama", "Nomor Telepon", "Kategori"}, 0);  
         tblKontak.setModel(model);
+        tblKontak.getColumnModel().getColumn(0).setPreferredWidth(40);
+        tblKontak.getColumnModel().getColumn(0).setMaxWidth(50);       // lebar maksimum
+        tblKontak.getColumnModel().getColumn(0).setMinWidth(30);
 
         loadContacts();
+        
+        
     }
 
     private void loadContacts() {
-        try {
-            model.setRowCount(0);
-            List<Kontak> contacts = controller.getAllContacts();
+    try {
+        model.setRowCount(0);
+        List<Kontak> contacts = controller.getAllContacts();
 
-            int rowNumber = 1;
-            for (Kontak contact : contacts) {
-                model.addRow(new Object[]{
-                    rowNumber++,
-                    contact.getNama(),
-                    contact.getNomorTelepon(),
-                    contact.getKategori()
-                });
-            }
-        } catch (SQLException e) {
-            showError(e.getMessage());
+        for (Kontak contact : contacts) {
+            model.addRow(new Object[]{
+                contact.getId(), // Simpan ID asli dari database
+                contact.getNama(),
+                contact.getNomorTelepon(),
+                contact.getKategori()
+            });
         }
+    } catch (SQLException e) {
+        showError(e.getMessage());
+    }
     }
 
     private void showError(String message) {
@@ -99,35 +103,36 @@ public class PengelolaanKontakFrame extends javax.swing.JFrame {
     
     // kode edit
     private void editContact() { 
-        int selectedRow = tblKontak.getSelectedRow();
-        if (selectedRow == -1) { 
-        JOptionPane.showMessageDialog(this, "Pilih kontak yang ingin diperbarui.", "Kesalahan", JOptionPane.WARNING_MESSAGE); 
-        return; 
-        }
-    
-        int id = (int) model.getValueAt(selectedRow, 0); 
-        String nama = txtNama.getText().trim(); 
-        String nomorTelepon = txtNomorTelepon.getText().trim(); 
-        String kategori = (String) cmbKategori.getSelectedItem(); 
-        
-        if (!validatePhoneNumber(nomorTelepon)) { 
+    int selectedRow = tblKontak.getSelectedRow();
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Pilih kontak yang ingin diperbarui.", "Kesalahan", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    // Ambil ID asli dari tabel
+    int id = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+    String nama = txtNama.getText().trim();
+    String nomorTelepon = txtNomorTelepon.getText().trim();
+    String kategori = (String) cmbKategori.getSelectedItem();
+
+    if (!validatePhoneNumber(nomorTelepon)) {
+        return;
+    }
+
+    try {
+        if (controller.isDuplicatePhoneNumber(nomorTelepon, id)) {
+            JOptionPane.showMessageDialog(this, "Kontak dengan nomor telepon ini sudah ada.", "Kesalahan", JOptionPane.WARNING_MESSAGE);
             return;
-        } 
-        
-        try { 
-            if (controller.isDuplicatePhoneNumber(nomorTelepon, id)) { 
-                JOptionPane.showMessageDialog(this, "Kontak nomor telepon ini sudah ada.", "Kesalahan", JOptionPane.WARNING_MESSAGE);
-            
-        return; 
         }
-            
-        controller.updateContact(id, nama, nomorTelepon, kategori); 
-        loadContacts(); 
-        JOptionPane.showMessageDialog(this, "Kontak berhasil diperbarui!"); 
-        clearInputFields(); 
-        } catch (SQLException ex) { 
-            showError("Gagal memperbarui kontak: " + ex.getMessage()); 
-        } 
+
+        controller.updateContact(id, nama, nomorTelepon, kategori);
+        loadContacts();
+        JOptionPane.showMessageDialog(this, "Kontak berhasil diperbarui!");
+        clearInputFields();
+
+    } catch (SQLException ex) {
+        showError("Gagal memperbarui kontak: " + ex.getMessage());
+    }
     }
     
     private void populateInputFields(int selectedRow) { 
@@ -145,18 +150,31 @@ public class PengelolaanKontakFrame extends javax.swing.JFrame {
     
     // hapus
     private void deleteContact() { 
-        int selectedRow = tblKontak.getSelectedRow(); 
-        if (selectedRow != -1) { 
-            int id = (int) model.getValueAt(selectedRow, 0); 
-            try { 
-                controller.deleteContact(id); 
-                loadContacts(); 
-                JOptionPane.showMessageDialog(this, "Kontak berhasil dihapus!"); 
-                clearInputFields(); 
-            } catch (SQLException e) {
-                showError(e.getMessage()); 
-            } 
-        } 
+    int selectedRow = tblKontak.getSelectedRow();
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Pilih kontak yang ingin dihapus.", "Kesalahan", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    int confirm = JOptionPane.showConfirmDialog(
+        this,
+        "Apakah Anda yakin ingin menghapus kontak ini?",
+        "Konfirmasi Hapus",
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirm == JOptionPane.YES_OPTION) {
+        int id = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+
+        try {
+            controller.deleteContact(id);
+            loadContacts();
+            JOptionPane.showMessageDialog(this, "Kontak berhasil dihapus!");
+            clearInputFields();
+        } catch (SQLException e) {
+            showError("Gagal menghapus kontak: " + e.getMessage());
+        }
+    }
     }
     
     // searching

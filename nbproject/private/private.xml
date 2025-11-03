@@ -4,11 +4,7 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Kuliah/5/Pbo2/AplikasiPengelolaanKontak/src/controller/KontakController.java</file>
-            <file>file:/D:/Kuliah/5/Pbo2/AplikasiPengelolaanKontak/src/model/KontakDAO.java</file>
-            <file>file:/D:/Kuliah/5/Pbo2/AplikasiPengelolaanKontak/src/model/Kontak.java</file>
             <file>file:/D:/Kuliah/5/Pbo2/AplikasiPengelolaanKontak/src/view/PengelolaanKontakFrame.java</file>
-            <file>file:/D:/Kuliah/5/Pbo2/AplikasiPengelolaanKontak/src/database/DatabaseConnection.java</file>
-            <file>file:/D:/Kuliah/5/Pbo2/AplikasiPengelolaanKontak/src/database/DatabaseSetup.java</file>
         </group>
     </open-files>
 </project-private>
